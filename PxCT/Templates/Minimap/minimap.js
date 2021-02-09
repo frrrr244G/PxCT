@@ -6,14 +6,14 @@
 // @author       Some Anon
 // @match        https://pixelcanvas.io/*
 // @match        http://pixelcanvas.io/*
-// @connect      mlp-pixelcanvas.herokuapp.com
+// @connect      mlppx.neocities.org
 // @grant        GM.xmlHttpRequest
 // ==/UserScript==
 // This userscript is licensed under CC BY-NC-SA (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode) by EMF - We are Aweseome (http://mlpixel.org/emf)
 // Licence Informations:
 // This userscript is distributed under the CC BY-NC-SA
 // You are free to copy and redistribute the material in any medium or format and to
-// remix, transform and build upon the material under the terms that you must give 
+// remix, transform and build upon the material under the terms that you must give
 // appropriate credit, it is non-commercial and that you distribute your contributions
 // under the same license as the orginial.
 // Keep in mind that just mentioning the license and creator in the source code is not appropriate credit, because it is
@@ -46,7 +46,7 @@
 .' /   \      |__/|      |      | `-._.-'(       |
 | (_    |      |  |      |      |      |  \      |
 '   `'-`       |  |       \     |       \  `.___/
- `-.._________/   \________)     \_______) 
+ `-.._________/   \________)     \_______)
  */
 
 cssStyle = `
@@ -323,7 +323,7 @@ function updateloop(){
   // Get JSON of available templates
   GM.xmlHttpRequest({
     method: "GET",
-    url: "http://mlp-pixelcanvas.herokuapp.com/templates/templates.json",
+    url: "https://mlppx.neocities.org/minimap/templates.json",
     onload: function(response) {
       template_list = JSON.parse(response.responseText);
       if(!toggle_follow)
@@ -420,7 +420,7 @@ function loadImage(templatearray){
   var imagepath = templatearray["filename"];
   console.log("    Load image " + imagepath);
   image_list[imagepath] = new Image();
-  image_list[imagepath].src = "http://mlp-pixelcanvas.herokuapp.com/templates/" + imagepath;
+  image_list[imagepath].src = "https://mlppx.neocities.org/minimap/" + imagepath;
   image_list[imagepath].onload = function() {
     counter += 1;
     // if last needed image loaded, start drawing

@@ -8,9 +8,12 @@
     using System.IO;
     using System.Linq;
     using System.Net.Http;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using System.Windows;
+    using System.Windows.Input;
     using System.Windows.Media;
+    using PxCT.Models;
     using Color = System.Drawing.Color;
     using Point = System.Drawing.Point;
 
@@ -29,6 +32,8 @@
         private const int SmallChunkPixels = SmallChunkSize * SmallChunkSize;
 
         private const int SmallChunksInBigChunk = 15;
+
+        private const string MinimapJsonFilename = "Templates/Minimap/templates.json";
 
         #region Fields
 
@@ -66,10 +71,19 @@
             {
                 SetProperty(value, ref _selectedTemplate);
                 DrawComparison();
+                (RefreshTemplateCommand as DelegateCommand).RaiseCanExecuteChanged();
             }
         }
 
         public IEnumerable<Template> Templates { get; private set; }
+
+        #region Commands
+
+        public ICommand CreateJsonCommand { get; private set; }
+
+        public ICommand RefreshTemplateCommand { get; private set; }
+
+        #endregion
 
         #endregion
 
@@ -122,6 +136,49 @@
             return false;
         }
 
+        #region Commands
+
+        private async void ExecuteCreateJson(object obj)
+        {
+            var minimapTemplates = Templates.Select(o => new MinimapTemplate
+            {
+                filename = o.Filename.Split('\\').Last(),
+                x = o.Area.X,
+                y = o.Area.Y,
+                width = o.Area.Width,
+                height = o.Area.Height
+            });
+
+            await using var createStream = File.Create(MinimapJsonFilename);
+            await JsonSerializer.SerializeAsync(createStream, minimapTemplates);
+        }
+
+        /// <summary>Reloads the big chunks occupied from the selected template.</summary>
+        private async void ExecuteRefreshTemplate(object obj)
+        {
+            // get area
+            var topLeft = new Point(SelectedTemplate.Area.X, SelectedTemplate.Area.Y);
+            var bottomRight = new Point(topLeft.X + SelectedTemplate.Area.Width, topLeft.Y + SelectedTemplate.Area.Height);
+
+            // convert to big chunk coordinates
+            topLeft.X = (int)Math.Round((topLeft.X - 32.0) / BigChunkSize);
+            topLeft.Y = (int)Math.Round((topLeft.Y - 32.0) / BigChunkSize);
+            bottomRight.X = (int)Math.Round((bottomRight.X - 32.0) / BigChunkSize);
+            bottomRight.Y = (int)Math.Round((bottomRight.Y - 32.0) / BigChunkSize);
+
+            // load big chunks
+            for (var x = topLeft.X; x <= bottomRight.X; x++)
+            {
+                for (var y = topLeft.Y; x <= bottomRight.Y; x++) { await LoadBigChunkAsync(new Point(x, y)); }
+            }
+
+            MarkErrors(SelectedTemplate);
+            DrawComparison();
+            OnPropertyChanged(nameof(Templates));
+        }
+
+        #endregion
+
         [Obsolete("Used only for debugging")]
         private void DrawCanvas()
         {
@@ -173,9 +230,57 @@
 
         private async void Initialize()
         {
+            InitializeCommands();
             LoadTemplates();
             await LoadCanvasAsync();
             FindTemplateErrors();
+        }
+
+        private void InitializeCommands()
+        {
+            RefreshTemplateCommand = new DelegateCommand(ExecuteRefreshTemplate, o => SelectedTemplate != null);
+            CreateJsonCommand = new DelegateCommand(ExecuteCreateJson);
+        }
+
+        private async Task LoadBigChunkAsync(Point coordinates)
+        {
+            using var client = new HttpClient();
+
+            // the coordinates represent the small chunk positions
+            var chunkUrl = $"{ChunkBaseUrl}/{coordinates.X * SmallChunksInBigChunk}.{coordinates.Y * SmallChunksInBigChunk}.bmp";
+            var response = await client.GetStreamAsync(chunkUrl);
+
+            using var sr = new BinaryReader(response);
+            var bytes = sr.ReadBytes(BigChunkPixels / 2);
+
+            // two color codes are encoded in one byte, each four bit long
+            var colorCodes = new List<int>();
+            foreach (var b in bytes)
+            {
+                var codeA = (b >> 4) & 15;
+                var codeB = b & 15;
+                colorCodes.Add(codeA);
+                colorCodes.Add(codeB);
+            }
+
+            // big chunks contain 15x15 small chunks
+            for (var smallChunkX = 0; smallChunkX < SmallChunksInBigChunk; smallChunkX++)
+            {
+                for (var smallChunkY = 0; smallChunkY < SmallChunksInBigChunk; smallChunkY++)
+                {
+                    // small chunks contain 64x64 pixels
+                    for (var x = 0; x < SmallChunkSize; x++)
+                    {
+                        for (var y = 0; y < SmallChunkSize; y++)
+                        {
+                            var pixelIndex = ((smallChunkX + (smallChunkY * SmallChunksInBigChunk)) * SmallChunkPixels) + x + (y * SmallChunkSize);
+                            var canvasX = (smallChunkX * SmallChunkSize) + x + (coordinates.X * BigChunkSize) + _canvas.ChunkOffset.X;
+                            var canvasY = (smallChunkY * SmallChunkSize) + y + (coordinates.Y * BigChunkSize) + _canvas.ChunkOffset.Y;
+                            _canvas.Pixels[canvasX, canvasY] = colorCodes[pixelIndex];
+                        }
+                    }
+                }
+            }
         }
 
         private async Task LoadCanvasAsync()
@@ -195,7 +300,7 @@
             var chunkTopLeft = new Point((topLeft.X - ZeroOffset) / BigChunkSize, (topLeft.Y - ZeroOffset) / BigChunkSize);
             var chunkBottomRight = new Point((bottomRight.X + ZeroOffset) / BigChunkSize, (bottomRight.Y + ZeroOffset) / BigChunkSize);
 
-            var canvas = CreateEmptyCanvas(chunkTopLeft, chunkBottomRight);
+            _canvas = CreateEmptyCanvas(chunkTopLeft, chunkBottomRight);
 
             using var client = new HttpClient();
 
@@ -207,47 +312,9 @@
                     // check if chunk is actually needed
                     var bigChunkPos = new Point((bigChunkX * BigChunkSize) - ZeroOffset, (bigChunkY * BigChunkSize) - ZeroOffset);
                     var isBigChunkNeeded = Templates.Any(template => IsTemplateInChunk(template, bigChunkPos));
-                    if (!isBigChunkNeeded) { continue; }
-
-                    // the coordinates represent the small chunk positions
-                    var chunkUrl = $"{ChunkBaseUrl}/{bigChunkX * SmallChunksInBigChunk}.{bigChunkY * SmallChunksInBigChunk}.bmp";
-                    var response = await client.GetStreamAsync(chunkUrl);
-
-                    using var sr = new BinaryReader(response);
-                    var bytes = sr.ReadBytes(BigChunkPixels / 2);
-
-                    // two color codes are encoded in one byte, each four bit long
-                    var colorCodes = new List<int>();
-                    foreach (var b in bytes)
-                    {
-                        var codeA = (b >> 4) & 15;
-                        var codeB = b & 15;
-                        colorCodes.Add(codeA);
-                        colorCodes.Add(codeB);
-                    }
-
-                    // big chunks contain 15x15 small chunks
-                    for (var smallChunkX = 0; smallChunkX < SmallChunksInBigChunk; smallChunkX++)
-                    {
-                        for (var smallChunkY = 0; smallChunkY < SmallChunksInBigChunk; smallChunkY++)
-                        {
-                            // small chunks contain 64x64 pixels
-                            for (var x = 0; x < SmallChunkSize; x++)
-                            {
-                                for (var y = 0; y < SmallChunkSize; y++)
-                                {
-                                    var pixelIndex = ((smallChunkX + (smallChunkY * SmallChunksInBigChunk)) * SmallChunkPixels) + x + (y * SmallChunkSize);
-                                    var canvasX = (smallChunkX * SmallChunkSize) + x + (bigChunkX * BigChunkSize) + canvas.ChunkOffset.X;
-                                    var canvasY = (smallChunkY * SmallChunkSize) + y + (bigChunkY * BigChunkSize) + canvas.ChunkOffset.Y;
-                                    canvas.Pixels[canvasX, canvasY] = colorCodes[pixelIndex];
-                                }
-                            }
-                        }
-                    }
+                    if (isBigChunkNeeded) { await LoadBigChunkAsync(new Point(bigChunkX, bigChunkY)); }
                 }
             }
-
-            _canvas = canvas;
         }
 
         private void LoadTemplates()
