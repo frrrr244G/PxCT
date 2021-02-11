@@ -205,6 +205,9 @@
     <None Update="Templates\DerpieAndDashie_-964_1313.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\DiamondTiaraBlankFlanks_-1558_1235.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\DiamondTiaraBlankFlanks_-1588_1235.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
