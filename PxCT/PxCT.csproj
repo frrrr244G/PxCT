@@ -55,6 +55,9 @@
     <None Update="Templates\AppleJackSmoll_-2219_1560.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\AppleParents_-39_506.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\AppleTruck_-1197_1189.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -181,6 +184,27 @@
     <None Update="templates\BoopBox_-3593_1705.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\BorderDash_-218_405.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderFlutters_-183_358.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderPinkie_-261_365.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderRarity_-130_362.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderSpike_182_359.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderTwi_-78_365.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderVinyl_-154_425.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Braebur_-3211_2379.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -214,6 +238,9 @@
     <None Update="Templates\DiamondTiaraBlankFlanks_-1588_1235.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="templates\ElementsOfHarmony_-733_358.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\Faggot_627_358.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -221,6 +248,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\FightingHerds_-2612_1799.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\Fizzlepop_-185_447.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\flutbut_-7_1295.png">
@@ -283,6 +313,9 @@
     <None Update="Templates\KissingBooth_-1102_1407.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\LegionRarity_-179_527.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\LewdRarity_-1154_2025.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -319,6 +352,9 @@
     <None Update="Templates\LyraHeartstringsBoop_-3123_1679.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\MagicGlimmer_-233_530.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\MareDoWell_-807_865.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -347,6 +383,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\PinkieBlueSmile_-1060_1776.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PonytownTrixie_202_477.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\PortraitAppleBloom_-2053_1671.png">
@@ -550,6 +589,9 @@
     <None Update="Templates\StarlightGlimmer_-2784_1466.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\Sunburst_-235_478.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\SweetieBelleStar_-2885_2070.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -566,6 +608,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="templates\TinyFluttershyAndAnonfilly_-493_954.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\TorsolessAJ_172_496.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\Trixiebeats_-196_509.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\TrixieThicc_-1988_1571.png">
