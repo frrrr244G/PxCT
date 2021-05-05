@@ -141,7 +141,7 @@
         private async void ExecuteCreateJson(object obj)
         {
             var minimapTemplates = Templates.Select(o => new MinimapTemplate
-            {
+            {   
                 filename = o.Filename.Split('\\').Last(),
                 x = o.Area.X,
                 y = o.Area.Y,
@@ -151,6 +151,7 @@
 
             await using var createStream = File.Create(MinimapJsonFilename);
             await JsonSerializer.SerializeAsync(createStream, minimapTemplates);
+            MessageBox.Show("JSON-file created.", "Done", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         /// <summary>Reloads the big chunks occupied from the selected template.</summary>
