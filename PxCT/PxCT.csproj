@@ -373,6 +373,9 @@
     <None Update="templates\Flutterbutt_-4001_2166.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\FlutterDance_-216_1396.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\Flutterdonut_-258_1047.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
