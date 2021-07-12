@@ -82,6 +82,9 @@
     <None Update="Templates\AppleJackSmoll_-2219_1560.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\Applejack_-1074_427.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\AppleParents_-39_506.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -139,6 +142,9 @@
     <None Update="Templates\BannerHuelestia_-292_1245.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\BannerKindMareSpirit_-3457_1883.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\BannerLaurenFaust_-3235_1883.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -154,7 +160,16 @@
     <None Update="Templates\BannerMrBonesWildRide_-517_672.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="templates\BannerMyLittleCultists_-292_672.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BannerNoGodsNoMasters_-847_672.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\BannerNotAChangeling_-736_1245.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BannerNotDyed_-625_1245.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\BannerOnceUponATime_-614_1777.png">
@@ -227,6 +242,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\BoopBox_-3593_1705.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderApplejack_-265_435.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderApplejack_-266_435.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\BorderApplejack_-267_435.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\BorderDash_-218_405.png">
@@ -313,6 +337,9 @@
     <None Update="Templates\DerpieAndDashie_-964_1313.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\DerpyDoesNotHappenMuch_-2584_973.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\DerpyUpsideDown_-3082_1765.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -365,6 +392,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\FlimAndFlam_-1187_757.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\Flurry_-9320_9720.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\flutbut_-7_1295.png">
@@ -508,6 +538,9 @@
     <None Update="templates\LunaSmallPortrait_-228_797.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\LunaSmallPortrait_-280_797.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\LunaSocks_-2629_1934.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -592,7 +625,13 @@
     <None Update="templates\PapyraMaroon_-198_747.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\PinkeSmoll_-752_995.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\PinkieBlueSmile_-1060_1776.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PinkieWindow_-885_449.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\PonytownAnonfilly.png">
@@ -602,6 +641,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\PonytownTrixie_202_477.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PonyvilleMarketplace_-16587_10583.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PonyvilleStores_-16467_10448.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PonyvilleTownHall_-16696_10602.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PonyvilleTownHall_-16696_10603.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PonyvillFountain_-16868_10742.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\PopcornGlimmer_-1161_671.png">
@@ -619,6 +673,9 @@
     <None Update="Templates\PortraitBonBon_-66_1144.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\PortraitCelestia_-610_1675.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\PortraitCloudyQuartz_-3118_1578.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -632,6 +689,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\PortraitDaisy_-3456_1782.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PortraitDerpieMail_-843_1144.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\PortraitDerpy_-510_1144.png">
@@ -656,6 +716,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\PortraitLimestonePie_-1719_1675.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PortraitLuna_-721_1675.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\PortraitLyraHeartstrings_-177_1144.png">
@@ -713,6 +776,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\PortraitScootaloo_-1831_1666.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\PortraitShimmer_-832_1675.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\PortraitShiningArmor_-2386_1675.png">
@@ -907,6 +973,9 @@
     <None Update="templates\TinyDashface_-43_1008.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="templates\TinyFlutterDerpieKis_-921_534.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="templates\TinyFluttershyAndAnonfilly_-493_954.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -959,6 +1028,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="templates\TwilightButt_-450_1295.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="templates\TwilightFutuerPortrait_-917_473.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Templates\TwilightInLove_-1833_1540.png">
