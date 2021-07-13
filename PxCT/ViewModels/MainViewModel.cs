@@ -1,25 +1,27 @@
-﻿namespace PxCT
-{
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Text.Json;
-    using System.Threading.Tasks;
-    using System.Windows;
-    using System.Windows.Input;
-    using System.Windows.Media;
-    using PxCT.Models;
-    using Color = System.Drawing.Color;
-    using Point = System.Drawing.Point;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+using PxCT.Models;
+using Color = System.Drawing.Color;
+using Point = System.Drawing.Point;
 
+namespace PxCT
+{
     internal class MainViewModel : BindableBase
     {
         private const int BigChunkSize = 960;
+
+        private const double BigChunkSizeD = BigChunkSize;
 
         private const int BigChunkPixels = BigChunkSize * BigChunkSize;
 
@@ -41,7 +43,15 @@
 
         private ImageSource _compareImage;
 
+        /// <summary>Backing field for <see cref="IsLoading"/>.</summary>
+        private bool _isLoading;
+
+        private string _searchText;
+
         private Template _selectedTemplate;
+
+        /// <summary>Backing field for <see cref="TemplatesFiltered"/>.</summary>
+        private IEnumerable<Template> _templatesFiltered;
 
         #endregion
 
@@ -50,8 +60,6 @@
             Initialize();
 
             // todo: Show target color when hovering error pixels
-            // todo: Search / Filter for templates
-            // todo: Add refresh for chunks used in all/selected template
             // todo: Parallel loading of big chunks
             // todo: Make pixel grid toggleable
         }
@@ -64,20 +72,48 @@
             private set => SetProperty(value, ref _compareImage);
         }
 
+        /// <summary>Gets or sets value indicating whether data is being loaded.</summary>
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetProperty(value, ref _isLoading);
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                SetProperty(value, ref _searchText);
+                TemplatesFiltered = string.IsNullOrWhiteSpace(value) ? Templates : Templates.Where(o => o.Name.ToLower().Contains(value.ToLower()));
+            }
+        }
+
         public Template SelectedTemplate
         {
             get => _selectedTemplate;
             set
             {
                 SetProperty(value, ref _selectedTemplate);
-                DrawComparison();
+                if (value != null) { DrawComparison(); }
+
                 (RefreshTemplateCommand as DelegateCommand).RaiseCanExecuteChanged();
+                (CopyLinkCommand as DelegateCommand).RaiseCanExecuteChanged();
             }
         }
 
         public IEnumerable<Template> Templates { get; private set; }
 
+        /// <summary>Gets or sets Description</summary>
+        public IEnumerable<Template> TemplatesFiltered
+        {
+            get => _templatesFiltered;
+            set => SetProperty(value, ref _templatesFiltered);
+        }
+
         #region Commands
+
+        public ICommand CopyLinkCommand { get; private set; }
 
         public ICommand CreateJsonCommand { get; private set; }
 
@@ -138,10 +174,15 @@
 
         #region Commands
 
+        private void ExecuteCopyLink(object obj)
+        {
+            Clipboard.SetText($"https://pixelcanvas.io/@{SelectedTemplate.Area.X}.{SelectedTemplate.Area.Y}");
+        }
+
         private async void ExecuteCreateJson(object obj)
         {
             var minimapTemplates = Templates.Select(o => new MinimapTemplate
-            {   
+            {
                 filename = o.Filename.Split('\\').Last(),
                 x = o.Area.X,
                 y = o.Area.Y,
@@ -157,25 +198,31 @@
         /// <summary>Reloads the big chunks occupied from the selected template.</summary>
         private async void ExecuteRefreshTemplate(object obj)
         {
-            // get area
-            var topLeft = new Point(SelectedTemplate.Area.X, SelectedTemplate.Area.Y);
-            var bottomRight = new Point(topLeft.X + SelectedTemplate.Area.Width, topLeft.Y + SelectedTemplate.Area.Height);
-
-            // convert to big chunk coordinates
-            topLeft.X = (int)Math.Round((topLeft.X - 32.0) / BigChunkSize);
-            topLeft.Y = (int)Math.Round((topLeft.Y - 32.0) / BigChunkSize);
-            bottomRight.X = (int)Math.Round((bottomRight.X - 32.0) / BigChunkSize);
-            bottomRight.Y = (int)Math.Round((bottomRight.Y - 32.0) / BigChunkSize);
-
-            // load big chunks
-            for (var x = topLeft.X; x <= bottomRight.X; x++)
+            try
             {
-                for (var y = topLeft.Y; x <= bottomRight.Y; x++) { await LoadBigChunkAsync(new Point(x, y)); }
-            }
+                IsLoading = true;
 
-            MarkErrors(SelectedTemplate);
-            DrawComparison();
-            OnPropertyChanged(nameof(Templates));
+                // get area
+                var topLeft = new Point(SelectedTemplate.Area.X, SelectedTemplate.Area.Y);
+                var bottomRight = new Point(topLeft.X + SelectedTemplate.Area.Width, topLeft.Y + SelectedTemplate.Area.Height);
+
+                // convert to big chunk coordinates
+                topLeft.X = (int) Math.Floor((topLeft.X + ZeroOffset) / BigChunkSizeD);
+                topLeft.Y = (int) Math.Floor((topLeft.Y + ZeroOffset) / BigChunkSizeD);
+                bottomRight.X = (int) Math.Floor((bottomRight.X + ZeroOffset) / BigChunkSizeD);
+                bottomRight.Y = (int) Math.Floor((bottomRight.Y + ZeroOffset) / BigChunkSizeD);
+
+                // load big chunks
+                for (var x = topLeft.X; x <= bottomRight.X; x++)
+                {
+                    for (var y = topLeft.Y; y <= bottomRight.Y; y++) { await LoadBigChunkAsync(new Point(x, y)); }
+                }
+
+                MarkErrors(SelectedTemplate);
+                DrawComparison();
+                OnPropertyChanged(nameof(Templates));
+            }
+            finally { IsLoading = false; }
         }
 
         #endregion
@@ -231,16 +278,22 @@
 
         private async void Initialize()
         {
-            InitializeCommands();
-            LoadTemplates();
-            await LoadCanvasAsync();
-            FindTemplateErrors();
+            try
+            {
+                IsLoading = true;
+                InitializeCommands();
+                LoadTemplates();
+                await LoadCanvasAsync();
+                FindTemplateErrors();
+            }
+            finally { IsLoading = false; }
         }
 
         private void InitializeCommands()
         {
             RefreshTemplateCommand = new DelegateCommand(ExecuteRefreshTemplate, o => SelectedTemplate != null);
             CreateJsonCommand = new DelegateCommand(ExecuteCreateJson);
+            CopyLinkCommand = new DelegateCommand(ExecuteCopyLink, o => SelectedTemplate != null);
         }
 
         private async Task LoadBigChunkAsync(Point coordinates)
@@ -287,8 +340,8 @@
         private async Task LoadCanvasAsync()
         {
             // calculate needed chunks
-            var topLeft = new Point(0, 0);
-            var bottomRight = new Point(0, 0);
+            var topLeft = new Point(Templates.First().Area.X, Templates.First().Area.Y);
+            var bottomRight = new Point(Templates.First().Area.X, Templates.First().Area.Y);
 
             foreach (var template in Templates)
             {
@@ -298,8 +351,13 @@
                 bottomRight.Y = Math.Max(bottomRight.Y, template.Area.Y + template.Pixels.GetUpperBound(1));
             }
 
-            var chunkTopLeft = new Point((topLeft.X - ZeroOffset) / BigChunkSize, (topLeft.Y - ZeroOffset) / BigChunkSize);
-            var chunkBottomRight = new Point((bottomRight.X + ZeroOffset) / BigChunkSize, (bottomRight.Y + ZeroOffset) / BigChunkSize);
+            var chunkTopLeftX = (int) Math.Floor((topLeft.X + ZeroOffset) / BigChunkSizeD);
+            var chunkTopLeftY = (int) Math.Floor((topLeft.Y + ZeroOffset) / BigChunkSizeD);
+            var chunkBottomRightX = (int) Math.Floor((bottomRight.X + ZeroOffset) / BigChunkSizeD);
+            var chunkBottomRightY = (int) Math.Floor((bottomRight.Y + ZeroOffset) / BigChunkSizeD);
+
+            var chunkTopLeft = new Point(chunkTopLeftX, chunkTopLeftY);
+            var chunkBottomRight = new Point(chunkBottomRightX, chunkBottomRightY);
 
             _canvas = CreateEmptyCanvas(chunkTopLeft, chunkBottomRight);
 
@@ -367,6 +425,7 @@
             });
 
             Templates = new ObservableCollection<Template>(templates.OrderBy(o => o.Name));
+            TemplatesFiltered = Templates;
         }
 
         private void MarkErrors(Template template)

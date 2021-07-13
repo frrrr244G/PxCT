@@ -9,7 +9,11 @@
     Width="800"
     Height="450"
     Icon="/logo.ico"
+    d:DataContext="{d:DesignInstance local:MainViewModel}"
     mc:Ignorable="d">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
     <DockPanel>
 
         <!--  Toolbar  -->
@@ -24,8 +28,12 @@
                 <Button Command="{Binding RefreshTemplateCommand}" ToolTip="Opens the info dialog">
                     <Image Source="../Resources/information.png" />
                 </Button>
+                <Button Command="{Binding CopyLinkCommand}" ToolTip="Copies the link of the current template to the clipboard">
+                    <Image Source="../Resources/Link.png" />
+                </Button>
             </ToolBar>
         </ToolBarTray>
+
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -33,11 +41,20 @@
                 <ColumnDefinition Width="2" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
             <!--  Template selection  -->
-            <ListView
+            <TextBox
+                Grid.Row="0"
                 Grid.Column="0"
-                ItemsSource="{Binding Templates}"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <ListView
+                Grid.Row="1"
+                Grid.Column="0"
+                ItemsSource="{Binding TemplatesFiltered}"
                 ScrollViewer.CanContentScroll="False"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -48,31 +65,33 @@
                         <StackPanel Orientation="Vertical">
                             <DockPanel>
                                 <Label Content="{Binding Name}" DockPanel.Dock="Left" />
-                                <Label
-                                    HorizontalAlignment="Right"
-                                    Content="{Binding ErrorCount}"
-                                    DockPanel.Dock="Right" />
                             </DockPanel>
                             <Image
                                 HorizontalAlignment="Stretch"
                                 RenderOptions.BitmapScalingMode="NearestNeighbor"
                                 Source="{Binding Image}"
                                 Stretch="Uniform" />
-                            <ProgressBar
-                                Height="10"
-                                Maximum="{Binding PixelCount}"
-                                Value="{Binding GoodPixelCount, Mode=OneWay}">
-                                <ProgressBar.Style>
-                                    <Style TargetType="{x:Type ProgressBar}">
-                                        <Setter Property="Foreground" Value="Green" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding HasErrors}" Value="True">
-                                                <Setter Property="Foreground" Value="Red" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ProgressBar.Style>
-                            </ProgressBar>
+                            <Grid>
+                                <ProgressBar
+                                    Height="12"
+                                    Maximum="{Binding PixelCount}"
+                                    Value="{Binding GoodPixelCount, Mode=OneWay}">
+                                    <ProgressBar.Style>
+                                        <Style TargetType="{x:Type ProgressBar}">
+                                            <Setter Property="Foreground" Value="YellowGreen" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasErrors}" Value="True">
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ProgressBar.Style>
+                                </ProgressBar>
+                                <Label
+                                    HorizontalAlignment="Center"
+                                    Content="{Binding ErrorCount}"
+                                    DockPanel.Dock="Right" />
+                            </Grid>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -81,7 +100,7 @@
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
             <!--  Comparison  -->
-            <ScrollViewer Grid.Column="2">
+            <ScrollViewer Grid.RowSpan="2" Grid.Column="2">
                 <Viewbox
                     x:Name="ComparisonView"
                     MouseLeftButtonDown="ComparisonView_MouseLeftButtonDown"
@@ -116,6 +135,20 @@
                     </Grid>
                 </Viewbox>
             </ScrollViewer>
+
+
+            <Border
+                Grid.RowSpan="2"
+                Grid.ColumnSpan="3"
+                Background="#AA000000"
+                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    Text="Loading..." />
+            </Border>
+
         </Grid>
     </DockPanel>
 </Window>
