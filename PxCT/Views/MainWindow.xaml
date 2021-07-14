@@ -8,8 +8,8 @@
     Title="PixelCanvas.IO Template Helper"
     Width="800"
     Height="450"
-    Icon="/logo.ico"
     d:DataContext="{d:DesignInstance local:MainViewModel}"
+    Icon="/logo.ico"
     mc:Ignorable="d">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -29,8 +29,11 @@
                     <Image Source="../Resources/information.png" />
                 </Button>
                 <Button Command="{Binding CopyLinkCommand}" ToolTip="Copies the link of the current template to the clipboard">
-                    <Image Source="../Resources/Link.png" />
+                    <Image Source="../Resources/link.png" />
                 </Button>
+                <ToggleButton IsChecked="{Binding IsGridShown, Mode=TwoWay}">
+                    <Image Source="../Resources/grid.png" />
+                </ToggleButton>
             </ToolBar>
         </ToolBarTray>
 
@@ -47,10 +50,13 @@
             </Grid.RowDefinitions>
 
             <!--  Template selection  -->
-            <TextBox
-                Grid.Row="0"
-                Grid.Column="0"
-                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <StackPanel>
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox IsChecked="{Binding OnlyShowDamages}">Only show damages</CheckBox>
+            </StackPanel>
             <ListView
                 Grid.Row="1"
                 Grid.Column="0"
@@ -112,7 +118,7 @@
                             RenderOptions.BitmapScalingMode="NearestNeighbor"
                             SnapsToDevicePixels="True"
                             Source="{Binding CompareImage}" />
-                        <Grid>
+                        <Grid Visibility="{Binding IsGridShown, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.Background>
                                 <DrawingBrush
                                     TileMode="Tile"

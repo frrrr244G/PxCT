@@ -43,8 +43,14 @@ namespace PxCT
 
         private ImageSource _compareImage;
 
+        /// <summary>Backing field for <see cref="IsGridShown"/>.</summary>
+        private bool _isGridShown = true;
+
         /// <summary>Backing field for <see cref="IsLoading"/>.</summary>
         private bool _isLoading;
+
+        /// <summary>Backing field for <see cref="OnlyShowDamages"/>.</summary>
+        private bool _onlyShowDamages;
 
         private string _searchText;
 
@@ -61,7 +67,6 @@ namespace PxCT
 
             // todo: Show target color when hovering error pixels
             // todo: Parallel loading of big chunks
-            // todo: Make pixel grid toggleable
         }
 
         #region Properties
@@ -72,11 +77,29 @@ namespace PxCT
             private set => SetProperty(value, ref _compareImage);
         }
 
+        /// <summary>Gets or sets a value indicating whether the grid in the comparison view is drawn.</summary>
+        public bool IsGridShown
+        {
+            get => _isGridShown;
+            set => SetProperty(value, ref _isGridShown);
+        }
+
         /// <summary>Gets or sets value indicating whether data is being loaded.</summary>
         public bool IsLoading
         {
             get => _isLoading;
             set => SetProperty(value, ref _isLoading);
+        }
+
+        /// <summary>Gets or sets a value indicating whether only damaged templates should be shown.</summary>
+        public bool OnlyShowDamages
+        {
+            get => _onlyShowDamages;
+            set
+            {
+                SetProperty(value, ref _onlyShowDamages);
+                RefreshFilteredTemplates();
+            }
         }
 
         public string SearchText
@@ -85,7 +108,7 @@ namespace PxCT
             set
             {
                 SetProperty(value, ref _searchText);
-                TemplatesFiltered = string.IsNullOrWhiteSpace(value) ? Templates : Templates.Where(o => o.Name.ToLower().Contains(value.ToLower()));
+                RefreshFilteredTemplates();
             }
         }
 
@@ -176,7 +199,7 @@ namespace PxCT
 
         private void ExecuteCopyLink(object obj)
         {
-            Clipboard.SetText($"https://pixelcanvas.io/@{SelectedTemplate.Area.X}.{SelectedTemplate.Area.Y}");
+            Clipboard.SetText($"https://pixelcanvas.io/@{SelectedTemplate.Area.X},{SelectedTemplate.Area.Y}");
         }
 
         private async void ExecuteCreateJson(object obj)
@@ -447,6 +470,12 @@ namespace PxCT
             }
 
             template.ErrorCount = errorCount;
+        }
+
+        private void RefreshFilteredTemplates()
+        {
+            TemplatesFiltered = string.IsNullOrWhiteSpace(SearchText) ? Templates : Templates.Where(o => o.Name.ToLower().Contains(SearchText.ToLower()));
+            if (OnlyShowDamages) { TemplatesFiltered = TemplatesFiltered.Where(o => o.HasErrors); }
         }
 
         #endregion
