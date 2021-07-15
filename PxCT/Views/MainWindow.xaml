@@ -19,7 +19,7 @@
         <!--  Toolbar  -->
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Command="{Binding RefreshTemplateCommand}" ToolTip="Refresh the scurrent template">
+                <Button Command="{Binding RefreshTemplateCommand}" ToolTip="Refresh the selected template">
                     <Image Source="../Resources/image_refresh.png" />
                 </Button>
                 <Button Command="{Binding CreateJsonCommand}" ToolTip="Creates the json file used for the minimap">
@@ -51,10 +51,7 @@
 
             <!--  Template selection  -->
             <StackPanel>
-                <TextBox
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
                 <CheckBox IsChecked="{Binding OnlyShowDamages}">Only show damages</CheckBox>
             </StackPanel>
             <ListView
@@ -69,9 +66,13 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <DockPanel>
-                                <Label Content="{Binding Name}" DockPanel.Dock="Left" />
-                            </DockPanel>
+                            <Label Content="{Binding Name}" DockPanel.Dock="Left" />
+                            <TextBox
+                                Background="Transparent"
+                                BorderThickness="0"
+                                DockPanel.Dock="Left"
+                                IsReadOnly="True"
+                                Text="{Binding Coordinates, Mode=OneWay}" />
                             <Image
                                 HorizontalAlignment="Stretch"
                                 RenderOptions.BitmapScalingMode="NearestNeighbor"
