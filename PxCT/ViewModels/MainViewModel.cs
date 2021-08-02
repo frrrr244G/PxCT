@@ -308,7 +308,10 @@ namespace PxCT
                 LoadTemplates();
                 await LoadCanvasAsync();
                 FindTemplateErrors();
-                MessageBox.Show($"We currently hold {Templates.Sum(o => o.GoodPixelCount)} pixels with {Templates.Sum(o => o.ErrorCount)} damages.");
+                MessageBox.Show($"We currently hold {Templates.Sum(o => o.GoodPixelCount)} pixels with {Templates.Sum(o => o.ErrorCount)} damages.",
+                    "Pixelcount",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
             }
             finally { IsLoading = false; }
         }
