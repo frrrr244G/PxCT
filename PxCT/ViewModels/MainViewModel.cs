@@ -426,7 +426,6 @@ namespace PxCT
                         Image = imageSource,
                         Name = filenameChunks[0].Split('\\').Last().AddSpacesBeforeUppercase(),
                         Pixels = new int[bmp.Width, bmp.Height],
-                        PixelCount = bmp.Width * bmp.Height,
                         Area = new Rectangle(
                             int.Parse(filenameChunks[1]),
                             int.Parse(filenameChunks[2].Split('.')[0]),
@@ -460,6 +459,7 @@ namespace PxCT
             // base offset from 0:0 is 448 pixels in both directions
             var zeroOffset = new Point(ZeroOffset + _canvas.ChunkOffset.X, ZeroOffset + _canvas.ChunkOffset.Y);
             var errorCount = 0;
+            var pixelCount = 0;
 
             for (var x = 0; x <= template.Pixels.GetUpperBound(0); x++)
             {
@@ -469,10 +469,13 @@ namespace PxCT
                     var currentColorId = _canvas.Pixels[x + template.Area.X + zeroOffset.X, y + template.Area.Y + zeroOffset.Y];
                     var hasError = (targetColorId > -1) && (targetColorId != currentColorId);
                     template.Errors[x, y] = hasError;
+
+                    pixelCount += currentColorId != -1 ? 1 : 0;
                     errorCount += hasError ? 1 : 0;
                 }
             }
 
+            template.PixelCount = pixelCount;
             template.ErrorCount = errorCount;
         }
 
