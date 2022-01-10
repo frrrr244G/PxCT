@@ -8,96 +8,154 @@
     Title="PixelCanvas.IO Template Helper"
     Width="800"
     Height="450"
+    d:DataContext="{d:DesignInstance local:MainViewModel}"
     Icon="/logo.ico"
     mc:Ignorable="d">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="2" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+    <DockPanel>
 
-        <!--  Template selection  -->
-        <ListView
-            Grid.Column="0"
-            ItemsSource="{Binding Templates}"
-            ScrollViewer.CanContentScroll="False"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            ScrollViewer.VerticalScrollBarVisibility="Visible"
-            SelectedItem="{Binding SelectedTemplate}">
+        <!--  Toolbar  -->
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Command="{Binding RefreshTemplateCommand}" ToolTip="Refresh the selected template">
+                    <Image Source="../Resources/image_refresh.png" />
+                </Button>
+                <Button Command="{Binding CreateJsonCommand}" ToolTip="Creates the json file used for the minimap">
+                    <Image Source="../Resources/json.png" />
+                </Button>
+                <Button Command="{Binding RefreshTemplateCommand}" ToolTip="Opens the info dialog">
+                    <Image Source="../Resources/information.png" />
+                </Button>
+                <Button Command="{Binding CopyLinkCommand}" ToolTip="Copies the link of the current template to the clipboard">
+                    <Image Source="../Resources/link.png" />
+                </Button>
+                <ToggleButton IsChecked="{Binding IsGridShown, Mode=TwoWay}">
+                    <Image Source="../Resources/grid.png" />
+                </ToggleButton>
+            </ToolBar>
+        </ToolBarTray>
 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <DockPanel>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="2" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Template selection  -->
+            <StackPanel>
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox IsChecked="{Binding OnlyShowDamages}">Only show damages</CheckBox>
+            </StackPanel>
+            <ListView
+                Grid.Row="1"
+                Grid.Column="0"
+                ItemsSource="{Binding TemplatesFiltered}"
+                ScrollViewer.CanContentScroll="False"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.VerticalScrollBarVisibility="Visible"
+                SelectedItem="{Binding SelectedTemplate}">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
                             <Label Content="{Binding Name}" DockPanel.Dock="Left" />
-                            <Label
-                                HorizontalAlignment="Right"
-                                Content="{Binding ErrorCount}"
-                                DockPanel.Dock="Right" />
-                        </DockPanel>
-                        <Image
-                            HorizontalAlignment="Stretch"
-                            RenderOptions.BitmapScalingMode="NearestNeighbor"
-                            Source="{Binding Image}"
-                            Stretch="Uniform" />
-                        <ProgressBar
-                            Height="10"
-                            Maximum="{Binding PixelCount}"
-                            Value="{Binding GoodPixelCount, Mode=OneWay}">
-                            <ProgressBar.Style>
-                                <Style TargetType="{x:Type ProgressBar}">
-                                    <Setter Property="Foreground" Value="Green" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasErrors}" Value="True">
-                                            <Setter Property="Foreground" Value="Red" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ProgressBar.Style>
-                        </ProgressBar>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                            <TextBox
+                                Background="Transparent"
+                                BorderThickness="0"
+                                DockPanel.Dock="Left"
+                                IsReadOnly="True"
+                                Text="{Binding Coordinates, Mode=OneWay}" />
+                            <Image
+                                HorizontalAlignment="Stretch"
+                                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                Source="{Binding Image}"
+                                Stretch="Uniform" />
+                            <Grid>
+                                <ProgressBar
+                                    Height="12"
+                                    Maximum="{Binding PixelCount}"
+                                    Value="{Binding GoodPixelCount, Mode=OneWay}">
+                                    <ProgressBar.Style>
+                                        <Style TargetType="{x:Type ProgressBar}">
+                                            <Setter Property="Foreground" Value="YellowGreen" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasErrors}" Value="True">
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ProgressBar.Style>
+                                </ProgressBar>
+                                <Label
+                                    HorizontalAlignment="Center"
+                                    Content="{Binding ErrorCount}"
+                                    DockPanel.Dock="Right" />
+                            </Grid>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
-        <!--  Comparison  -->
-        <ScrollViewer Grid.Column="2">
-            <Viewbox
-                x:Name="ComparisonView"
-                MouseLeftButtonDown="ComparisonView_MouseLeftButtonDown"
-                MouseLeftButtonUp="ComparisonView_MouseLeftButtonUp"
-                MouseMove="ComparisonView_MouseMove"
-                MouseWheel="ComparisonView_OnMouseWheel">
-                <Grid>
-                    <Image
-                        RenderOptions.BitmapScalingMode="NearestNeighbor"
-                        SnapsToDevicePixels="True"
-                        Source="{Binding CompareImage}" />
+            <!--  Comparison  -->
+            <ScrollViewer Grid.RowSpan="2" Grid.Column="2">
+                <Viewbox
+                    x:Name="ComparisonView"
+                    MouseLeftButtonDown="ComparisonView_MouseLeftButtonDown"
+                    MouseLeftButtonUp="ComparisonView_MouseLeftButtonUp"
+                    MouseMove="ComparisonView_MouseMove"
+                    MouseWheel="ComparisonView_OnMouseWheel">
                     <Grid>
-                        <Grid.Background>
-                            <DrawingBrush
-                                TileMode="Tile"
-                                Viewport="0,0,5,5"
-                                ViewportUnits="Absolute">
-                                <DrawingBrush.Drawing>
-                                    <DrawingGroup>
-                                        <DrawingGroup.Children>
-                                            <GeometryDrawing Geometry="M-.5,0 L50,0 M0,10 L50,10 M0,20 L50,20 M0,30 L50,30 M0,40 L50,40 M0,0 L0,50 M10,0 L10,50 M20,0 L20,50 M30,0 L30,50 M40,0 L40,50">
-                                                <GeometryDrawing.Pen>
-                                                    <Pen Brush="Gray" Thickness="1" />
-                                                </GeometryDrawing.Pen>
-                                            </GeometryDrawing>
-                                        </DrawingGroup.Children>
-                                    </DrawingGroup>
-                                </DrawingBrush.Drawing>
-                            </DrawingBrush>
-                        </Grid.Background>
+                        <Image
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            SnapsToDevicePixels="True"
+                            Source="{Binding CompareImage}" />
+                        <Grid Visibility="{Binding IsGridShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid.Background>
+                                <DrawingBrush
+                                    TileMode="Tile"
+                                    Viewport="0,0,5,5"
+                                    ViewportUnits="Absolute">
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <DrawingGroup.Children>
+                                                <GeometryDrawing Geometry="M-.5,0 L50,0 M0,10 L50,10 M0,20 L50,20 M0,30 L50,30 M0,40 L50,40 M0,0 L0,50 M10,0 L10,50 M20,0 L20,50 M30,0 L30,50 M40,0 L40,50">
+                                                    <GeometryDrawing.Pen>
+                                                        <Pen Brush="Gray" Thickness="1" />
+                                                    </GeometryDrawing.Pen>
+                                                </GeometryDrawing>
+                                            </DrawingGroup.Children>
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Grid.Background>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Viewbox>
-        </ScrollViewer>
-    </Grid>
+                </Viewbox>
+            </ScrollViewer>
+
+
+            <Border
+                Grid.RowSpan="2"
+                Grid.ColumnSpan="3"
+                Background="#AA000000"
+                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    Text="Loading..." />
+            </Border>
+
+        </Grid>
+    </DockPanel>
 </Window>

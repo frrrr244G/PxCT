@@ -459,6 +459,14 @@
 &lt;/Patterns&gt;</s:String>
 	<s:Boolean x:Key="/Default/CodeStyle/Naming/CSharpNaming/ApplyAutoDetectedRules/@EntryValue">False</s:Boolean>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateInstanceFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="_" Suffix="" Style="aaBb" /&gt;</s:String>
+	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeCoverageFilters/=Novotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_003B_002A_003BNovotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_002EAppCommands_003B_002A/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeCoverageFilters/=Novotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_003B_002A_003BNovotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_002ERibbonCommands_003B_002A/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeCoverageFilters/=Novotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_003B_002A_003BNovotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_002ERibbonCommandsProxy_003B_002A/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeCoverageFilters/=Novotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_003B_002A_003BNovotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_002EServices_002EApplicationService_003B_002A/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeCoverageFilters/=Novotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_003B_002A_003BNovotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_002EServices_002EFileService_003B_002A/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeCoverageFilters/=Novotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_003B_002A_003BNovotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_002EServices_002ERegistrationService_003B_002A/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeCoverageFilters/=Novotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_003B_002A_003BNovotergum_002EParacelsus2_002EFrontend_002ECommon_002EInfrastructure_002EServices_002ESerilogSeqLogger_003B_002A/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EdotCover_002EIde_002ECore_002EFilterManagement_002EModel_002ESolutionFilterSettingsManagerMigrateSettings/@EntryIndexedValue">True</s:Boolean>
 	
 	
 	

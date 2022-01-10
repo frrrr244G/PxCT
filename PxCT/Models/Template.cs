@@ -1,8 +1,8 @@
-﻿namespace PxCT
-{
-    using System.Drawing;
-    using System.Windows.Media;
+﻿using System.Drawing;
+using System.Windows.Media;
 
+namespace PxCT
+{
     internal class Template : BindableBase
     {
         #region Fields
@@ -14,6 +14,8 @@
         #region Properties
 
         public Rectangle Area { get; set; }
+
+        public string Coordinates => $"@{Area.X},{Area.Y}";
 
         public int ErrorCount
         {
