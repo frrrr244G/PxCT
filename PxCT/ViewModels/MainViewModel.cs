@@ -27,7 +27,7 @@ namespace PxCT
 
         private const int ZeroOffset = 448;
 
-        private const string ChunkBaseUrl = "https://api.pixelcanvas.io/api/bigchunk";
+        private const string ChunkBaseUrl = "https://pixelcanvas.io/api/bigchunk";
 
         private const int SmallChunkSize = 64;
 
