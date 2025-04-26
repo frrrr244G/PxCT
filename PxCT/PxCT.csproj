@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>logo.ico</ApplicationIcon>
@@ -17,31 +17,31 @@
   <ItemGroup>
     <None Remove="logo.ico" />
     <None Remove="PxCT.sln.DotSettings" />
-    <None Remove="Resources\grid.png" />
-    <None Remove="Resources\image_refresh.png" />
-    <None Remove="Resources\information.png" />
-    <None Remove="Resources\json.png" />
-    <None Remove="Resources\link.png" />
+    <None Remove="Resources\\grid.png" />
+    <None Remove="Resources\\image_refresh.png" />
+    <None Remove="Resources\\information.png" />
+    <None Remove="Resources\\json.png" />
+    <None Remove="Resources\\link.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\grid.png" />
-    <Resource Include="Resources\link.png" />
+    <Resource Include="Resources\\grid.png" />
+    <Resource Include="Resources\\link.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="logo.ico" />
-    <Resource Include="Resources\image_refresh.png" />
-    <Resource Include="Resources\information.png" />
-    <Resource Include="Resources\json.png" />
+    <Resource Include="Resources\\image_refresh.png" />
+    <Resource Include="Resources\\information.png" />
+    <Resource Include="Resources\\json.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="templates\*.png">
+    <None Update="templates\\*.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
